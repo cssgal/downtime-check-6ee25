@@ -63,7 +63,8 @@
                     <button class="btn btn-search ms-2" type="submit">Search</button>
                 </form>
             </div>
-            <p id="result" class="text-center mt-3"></p><a href="#more-info" class="link-secondary"><i class="fa fa-arrow-down fs-1 mt-lg-5 text-secondary" aria-hidden="true"></i></a>
+            <p id="result" class="text-center mt-3"></p>
+            <a href="#more-info" class="link-secondary"><i class="fa fa-arrow-down fs-1 mt-lg-5 text-secondary" aria-hidden="true"></i></a>
         </div>
         <div class="container mb-5 py-md-5" id="main-content">
             <div class="pb-lg-3 row" data-pgc-field="ad_after_search">
@@ -132,7 +133,7 @@
                 <aside class="col-md-3" data-pgc="sidebar">
                     <p>advertisement</p>
                     <div class="popular-sites mt-4">
-                        <h2 class="text-primary">Popular Sites Uptime</h2>
+                        <h2 class="text-red">Popular Sites Uptime</h2>
                         <ul id="uptime-list" class="fa-check-list">
                             <li>Checking Google...</li>
                             <li>Checking Facebook...</li>
@@ -148,16 +149,18 @@
     { name: "Wikipedia", url: "https://www.wikipedia.org" },
   ];
 
-  const proxyUrl = "https://api.allorigins.win/get?url=";
-fetch(proxyUrl + encodeURIComponent(site.url), { method: "GET" })
-  .then((response) => response.json())
-  .then((data) => {
-    list.children[index].textContent = `${site.name}: ${
-      data.status.http_code === 200 ? "Up" : "Down"
-    }`;
-  })
-  .catch(() => {
-    list.children[index].textContent = `${site.name}: Down (or blocked)`;
+  const proxyUrl = "/.netlify/assets/js/proxy?url=";
+  const list = document.getElementById("uptime-list");
+
+  sites.forEach((site, index) => {
+    fetch(proxyUrl + encodeURIComponent(site.url))
+      .then((response) => response.json())
+      .then((data) => {
+        list.children[index].textContent = `${site.name}: ${data.status}`;
+      })
+      .catch(() => {
+        list.children[index].textContent = `${site.name}: Down (or blocked)`;
+      });
   });
 </script>
                 </aside>
@@ -170,7 +173,8 @@ fetch(proxyUrl + encodeURIComponent(site.url), { method: "GET" })
                         <p class="mb-0 text-light">&copy; 2025 DowntimeCheck.com, a service of Meridia  Holdings, LLC.</p>
                         <p class="disclaimer mt-2 text-light"><em>Disclosure:</em> Some links on this site are affiliate links. If you purchase through them, we may earn a commission at no extra cost to you.</p>
                     </div>
-                    <div class="col-md-auto pb-2 pt-2"><a href="/privacy.html" class="text-light">Privacy Policy</a> 
+                    <div class="col-md-auto pb-2 pt-2">
+                        <a href="/privacy.html" class="text-light">Privacy Policy</a> 
                     </div>
                 </div>
             </div>
